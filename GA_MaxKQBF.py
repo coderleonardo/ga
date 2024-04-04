@@ -46,7 +46,7 @@ def read_data(data_path, show=False):
 
     return N, W, np.array(w), np.array(matrix)
 
-def write_to_csv(t_inspection, minutes, best_solution, best_fitness, config_name, filename="./outputs/csv/results.csv"):
+def write_to_csv(t_inspection, minutes, instance, best_solution, best_fitness, config_name, filename="./outputs/csv/results.csv"):
     # The 'a' parameter in open function stands for 'append'
     # It will create the file if it doesn't exist, and append to it if it does
     with open(filename, 'a', newline='') as file:
@@ -54,9 +54,9 @@ def write_to_csv(t_inspection, minutes, best_solution, best_fitness, config_name
         # Check if file is empty
         if file.tell() == 0:
             # Write the header
-            writer.writerow(["Time", "RunningTime", "Best Solution", "Best Fitness", "Config Name"])
+            writer.writerow(["Time", "RunningTime", "Instance", "Best Solution", "Best Fitness", "Config Name"])
         # Write the data
-        writer.writerow([t_inspection, minutes, best_solution, best_fitness, config_name])
+        writer.writerow([t_inspection, minutes, instance, best_solution, best_fitness, config_name])
 
 def str_to_bool(v):
 
@@ -205,7 +205,8 @@ def mutation(bitstring, mutation_rate):
 			bitstring[i] = 1 - bitstring[i]
 
 #############################################################################
-def genetic_algorithm(config_name,
+def genetic_algorithm(instance,
+                      config_name,
                       A, w, W, 
                       population_size, 
                     #   number_generation, 
@@ -340,7 +341,7 @@ def genetic_algorithm(config_name,
     plt.title("Genetic Algorithm - Fitness progress")
 
     # Save the figure before showing it
-    plt.savefig(f'./outputs/plots/{config}_fitness_progress.png', dpi=300)
+    plt.savefig(f'./outputs/plots/{instance}/{config_name}_fitness_progress.png', dpi=300)
 
     return best_solution, best_fitness
 
@@ -391,7 +392,8 @@ if __name__ == "__main__":
     print()
 
     # Aplicando o algoritmo genético
-    best_solution, best_fitness = genetic_algorithm(config,
+    best_solution, best_fitness = genetic_algorithm(problem_instance,
+                                                    config,
                                                     A, w, W, 
                                                     pop_size, 
                                                     #   number_generation, 
@@ -402,7 +404,7 @@ if __name__ == "__main__":
                                                     dynamic_mutation=dyn_mut,
                                                     mutation_rate=rate)
     
-    write_to_csv(now, minutes, best_solution, best_fitness, config)
+    write_to_csv(now, minutes, problem_instance, best_solution, best_fitness, config)
 
     print(f"Best solution: {best_solution}")
     print(f"Best fitness: {best_fitness}")
