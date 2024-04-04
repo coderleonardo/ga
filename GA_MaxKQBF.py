@@ -54,9 +54,9 @@ def write_to_csv(t_inspection, best_solution, best_fitness, config_name, filenam
         # Check if file is empty
         if file.tell() == 0:
             # Write the header
-            writer.writerow(["Time", "Best Solution", "Best Fitness", "Config Name"])
+            writer.writerow(["Time", "RunningTime", "Best Solution", "Best Fitness", "Config Name"])
         # Write the data
-        writer.writerow([t_inspection, best_solution, best_fitness, config_name])
+        writer.writerow([t_inspection, minutes, best_solution, best_fitness, config_name])
 
 #############################################################################
 # Definindo a função objetivo QBF
@@ -137,6 +137,16 @@ def stochastic_universal_selection(population, fitness_values, n_parents):
     
     # Inicializa os índices dos pais selecionados
     selected_parents = []
+
+    # # TEST #
+    # pointers = [start_point + i*segment_distances for i in range(n_parents)]
+
+    # for pointer in pointers:
+    #     i = 0
+    #     while sum(fitness_values[:i+1]) < pointer:
+    #         i += 1
+    #     selected_parents.append(population[i])
+    # # END TEST #
     
     # Inicializa o ponto de partida para a seleção
     selected_point = start_point
@@ -383,7 +393,7 @@ if __name__ == "__main__":
                                                     dynamic_mutation=dyn_mut,
                                                     mutation_rate=rate)
     
-    write_to_csv(now, best_solution, best_fitness, config)
+    write_to_csv(now, minutes, best_solution, best_fitness, config)
 
     print(f"Best solution: {best_solution}")
     print(f"Best fitness: {best_fitness}")
