@@ -46,7 +46,7 @@ def read_data(data_path, show=False):
 
     return N, W, np.array(w), np.array(matrix)
 
-def write_to_csv(t_inspection, best_solution, best_fitness, config_name, filename="./outputs/csv/results.csv"):
+def write_to_csv(t_inspection, minutes, best_solution, best_fitness, config_name, filename="./outputs/csv/results.csv"):
     # The 'a' parameter in open function stands for 'append'
     # It will create the file if it doesn't exist, and append to it if it does
     with open(filename, 'a', newline='') as file:
