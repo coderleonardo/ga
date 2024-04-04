@@ -331,7 +331,7 @@ def genetic_algorithm(config_name,
     plt.title("Genetic Algorithm - Fitness progress")
 
     # Save the figure before showing it
-    plt.savefig(f'./outputs/plots/{config}fitness_progress.png', dpi=300)
+    plt.savefig(f'./outputs/plots/{config}_fitness_progress.png', dpi=300)
 
     return best_solution, best_fitness
 
@@ -350,10 +350,10 @@ if __name__ == "__main__":
     parser.add_argument("problem_instance", type=str, help="Problem instance string")
     parser.add_argument("--pop-size", type=int, default=100, help="Population size (default: 100)")
 
-    parser.add_argument("--lhs", type=str, default=False, help="Configuration used to solve the problem")
-    parser.add_argument("--su", type=str, default=False, help="Configuration used to solve the problem")
-    parser.add_argument("--crossover", type=str, default=False, help="Configuration used to solve the problem")
-    parser.add_argument("--dmutation", type=str, default=True, help="Configuration used to solve the problem")
+    parser.add_argument("--lhs", type=bool, default=False, help="Configuration used to solve the problem")
+    parser.add_argument("--su", type=bool, default=False, help="Configuration used to solve the problem")
+    parser.add_argument("--crossover", type=bool, default=False, help="Configuration used to solve the problem")
+    parser.add_argument("--dmutation", type=bool, default=True, help="Configuration used to solve the problem")
     parser.add_argument("--mutation-rate", type=float, default=0.5, help="Configuration used to solve the problem")
 
     parser.add_argument("--minutes", type=float, default=1, help="Duration in minutes (default: 1)")
