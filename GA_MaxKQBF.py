@@ -58,6 +58,15 @@ def write_to_csv(t_inspection, best_solution, best_fitness, config_name, filenam
         # Write the data
         writer.writerow([t_inspection, minutes, best_solution, best_fitness, config_name])
 
+def str_to_bool(v):
+
+    if v.lower() in ("sim", "true", "1"):
+        return True
+    elif v.lower() in ("nao", "false", "0"):
+        return False
+    else:
+        raise argparse.ArgumentTypeError("Boolean type expected not passed")
+
 #############################################################################
 # Definindo a função objetivo QBF
 def objective_function(x, A):
@@ -350,10 +359,10 @@ if __name__ == "__main__":
     parser.add_argument("problem_instance", type=str, help="Problem instance string")
     parser.add_argument("--pop-size", type=int, default=100, help="Population size (default: 100)")
 
-    parser.add_argument("--lhs", type=bool, default=False, help="Configuration used to solve the problem")
-    parser.add_argument("--su", type=bool, default=False, help="Configuration used to solve the problem")
-    parser.add_argument("--crossover", type=bool, default=False, help="Configuration used to solve the problem")
-    parser.add_argument("--dmutation", type=bool, default=True, help="Configuration used to solve the problem")
+    parser.add_argument("--lhs", type=str_to_bool, default=False, help="Configuration used to solve the problem")
+    parser.add_argument("--su", type=str_to_bool, default=False, help="Configuration used to solve the problem")
+    parser.add_argument("--crossover", type=str_to_bool, default=False, help="Configuration used to solve the problem")
+    parser.add_argument("--dmutation", type=str_to_bool, default=True, help="Configuration used to solve the problem")
     parser.add_argument("--mutation-rate", type=float, default=0.5, help="Configuration used to solve the problem")
 
     parser.add_argument("--minutes", type=float, default=1, help="Duration in minutes (default: 1)")
