@@ -1,3 +1,5 @@
+import sys 
+
 import time
 from datetime import datetime
 import random
@@ -77,7 +79,7 @@ def constraint(x, w, W, show=False):
     result = np.dot(x, w)
     if show:
         print(f"<x|w> <= W?")
-        print(f"<{x}|{w}> = {result} \n <= {W}??? {result <= W}")
+        print(f"<{x}|{w}> = {result}  <= {W}??? {result <= W}")
     return result <= W
 
 #############################################################################
@@ -223,10 +225,19 @@ def genetic_algorithm(instance,
 
     n = len(w)
     if lhs_inicialization:
+        print("......LHS", end="\r\n")
         population = initialize_population_lhs(population_size, n)
     else:
+        print("......Random inicialization", end="\r\n")
         population = initialize_population(population_size, n) 
     fitness_history = []
+
+    print()
+    print(f"Population length: {len(population)}")
+    print()
+    # for pop in population:
+    #     print(pop)
+    #     print()
 
     best_solution = None
     best_fitness = float("-inf")
@@ -235,39 +246,52 @@ def genetic_algorithm(instance,
     secs = minutes * 60
     start_time = time.time()
     time_ = time.time() - start_time
+
+    iter_count = 0
     while (time_) < secs:
         # print(f"Time: {time_}")
 
-        generation = time_ * 60
+        iter_count += 1
+        print(f"Iteration number {iter_count}", end="\r\n")
+
+        generation = iter_count # time_ * 60
 
         # Evaluation
+        print("...Evaluation phase", end="\r\n")
         fitness = [objective_function(x, A) for x in population]
 
         feasible_population = [x for x in population if constraint(x, w, W)]
 
         # Selection 
-
+        print("...Selection phase", end="\r\n")
         if feasible_population:
-
+            print("......feasible population is not empty...", end="\r\n")
             feasible_fitness = [objective_function(x, A) for x in feasible_population]
             # Selecting parents with the highest feasible fitness
             if su_selection:
+                print("......SU selection", end="\r\n")
                 parents = stochastic_universal_selection(population, feasible_fitness, population_size)
             else:
+                print("......Simple weight selection", end="\r\n")
                 parents = random.choices(feasible_population, weights=feasible_fitness, k=population_size)
             
         else:
-
+            print("......feasible population is empty...", end="\r\n")
             parents = []
             while len(parents) < population_size:
+                print(f".........len parents: {len(parents)}...")
                 # Restart the initial population until we find a feasible solution
                 if lhs_inicialization:
+                    print("......LHS from empty population", end="\r\n")
                     adjusted_population = initialize_population_lhs(population_size, n)
                 else:
+                    print("......Random incialization from empty population", end="\r\n")
                     adjusted_population = initialize_population(population_size, n)
                 if any(weight > 0 for weight in fitness):
                     if su_selection:
-                        potential_parents = stochastic_universal_selection(adjusted_population, fitness, population_size)
+                        potential_parents = stochastic_universal_selection(adjusted_population, 
+                                                                           fitness, 
+                                                                           population_size)
                     else:
                         potential_parents = random.choices(adjusted_population, weights=fitness)
                     
@@ -279,23 +303,27 @@ def genetic_algorithm(instance,
                         parents.append(potential_parents)
                 except:
                     continue
-                
+        
+        print("...Offspring (Crossover) phase", end="\r\n")
         offspring = []
         for _ in range(population_size):
             
             parent1, parent2 = random.sample(parents, 2)
             
             if unif_crossover:
+                # print("......Uniform crossover", end="\r\n")
                 child = uniform_crossover(parent1, parent2)
             else:
+                # print("......Random crossover", end="\r\n")
                 child = np.array([random.choice([bit1, bit2]) for bit1, bit2 in zip(parent1, parent2)])
-            
+    
 
             offspring.append(child)
         
         # Mutation
-
+        print("...Mutation phase", end="\r\n")
         if dynamic_mutation == True:
+            print("......Dynamic mutation", end="\r\n")
             dynamic_mutation_rate = 1 / (generation + 1) # Dynamic mutation rate
             for i in range(population_size):
 
@@ -304,6 +332,7 @@ def genetic_algorithm(instance,
                     mutation_index = random.randint(0, len(offspring[i])-1)
                     offspring[i][mutation_index] = 1 - offspring[i][mutation_index]  # Flip the bit at the mutation_index
         else:
+            print("......With mutation rate", end="\r\n")
             for i in range(population_size): # Fixed mutation rate
                 mutation(offspring[i], mutation_rate)
     
@@ -315,6 +344,7 @@ def genetic_algorithm(instance,
         population = offspring
 
         # Find the best feasible solution
+        print("...Best solution phase", end="\r\n")
         feasible_solutions = [x for x in population if constraint(x, w, W)]
 
         if feasible_solutions:
