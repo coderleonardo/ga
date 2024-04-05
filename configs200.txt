@@ -1,0 +1,5 @@
+python3 GA_MaxKQBF.py kqbf200 --pop-size 1000000 --lhs False --su True --crossover False --dmutation False --mutation-rate 0.55 --minutes 30
+python3 GA_MaxKQBF.py kqbf200 --pop-size 3000000 --lhs False --su True --crossover False --dmutation True --mutation-rate 0.55 --minutes 30
+python3 GA_MaxKQBF.py kqbf200 --pop-size 1000000 --lhs False --su True --crossover False --dmutation False --mutation-rate 0.2 --minutes 30
+python3 GA_MaxKQBF.py kqbf200 --pop-size 1000000 --lhs True --su True --crossover False --dmutation True --mutation-rate 0.55 --minutes 30
+python3 GA_MaxKQBF.py kqbf200 --pop-size 1000000 --lhs False --su True --crossover True --dmutation True --mutation-rate 0.55 --minutes 30
